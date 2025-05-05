@@ -8,7 +8,7 @@ A modern web application for finding and filtering workout sessions. Built with 
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **Testing**: [Jest](https://jestjs.io/) + [React Testing Library](https://testing-library.com/)
+- **Testing**: [Jest](https://jestjs.io/) + [React Testing Library](https://testing-library.com/) + [Cypress](https://www.cypress.io/)
 - **Linting**: [ESLint](https://eslint.org/)
 - **Formatting**: [Prettier](https://prettier.io/)
 
@@ -23,7 +23,7 @@ A modern web application for finding and filtering workout sessions. Built with 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/workout-finder.git
+   git clone https://github.com/hari2309s/workout-finder.git
    cd workout-finder
    ```
 
@@ -115,14 +115,15 @@ The application provides utility functions for working with the filter state:
 
 ## Testing
 
-Run the test suite:
+The application includes comprehensive test coverage:
 
+### Unit Tests
+Run unit tests with Jest:
 ```bash
 npm test
 ```
 
 Run end-to-end tests with Cypress:
-
 ```bash
 # Open Cypress test runner
 npm run cypress:open
