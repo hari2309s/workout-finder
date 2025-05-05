@@ -153,12 +153,12 @@ describe("Filters component", () => {
 
     jest.runAllTimers();
 
-    expect(defaultProps.onFilterChange).toHaveBeenCalledWith("2025-05", ["c1"]);
+    expect(defaultProps.onFilterChange).toHaveBeenCalledWith("2025-07", ["c1"]);
 
     expect(defaultProps.onFilterChange).toHaveBeenCalledTimes(2);
     expect(defaultProps.onFilterChange.mock.calls[0]).toEqual(["2025-07", []]);
     expect(defaultProps.onFilterChange.mock.calls[1]).toEqual([
-      "2025-05",
+      "2025-07",
       ["c1"],
     ]);
   });

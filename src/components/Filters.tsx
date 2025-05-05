@@ -1,6 +1,7 @@
 "use client";
 import { Calendar, Tag, RefreshCw } from "lucide-react";
 import MultiSelect from "@/components/MultiSelect";
+import { useState, useEffect } from "react";
 
 interface FiltersProps {
   startDate: string;
@@ -25,27 +26,39 @@ const Filters: React.FC<FiltersProps> = ({
   const minMonth = minDate.slice(0, 7);
   const maxMonth = maxDate.slice(0, 7);
 
-  const formattedStartDate =
-    startDate && startDate.match(/^\d{4}-\d{2}$/) ? startDate : "";
+  const [inputType, setInputType] = useState<"month" | "date">("month");
+  const [formattedStartDate, setFormattedStartDate] = useState(
+    startDate && startDate.match(/^\d{4}-\d{2}$/) ? startDate : "",
+  );
 
-  // Check if type="month" is supported (only runs in browser)
-  const isMonthSupported =
-    typeof window !== "undefined" &&
-    (() => {
-      const input = document.createElement("input");
-      input.setAttribute("type", "month");
-      return input.type === "month";
-    })();
+  useEffect(() => {
+    // Detect browser support for type="month" on client side
+    const checkMonthSupport = () => {
+      if (typeof window !== "undefined") {
+        const input = document.createElement("input");
+        input.setAttribute("type", "month");
+        const isSupported = input.type === "month";
+        setInputType(isSupported ? "month" : "date");
+        // Update formattedStartDate based on the input type
+        setFormattedStartDate(
+          isSupported
+            ? startDate && startDate.match(/^\d{4}-\d{2}$/)
+              ? startDate
+              : ""
+            : startDate && startDate.match(/^\d{4}-\d{2}$/)
+              ? `${startDate}-01`
+              : "",
+        );
+      }
+    };
+    checkMonthSupport();
+  }, [startDate]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-
-    if (isMonthSupported) {
-      onFilterChange(value, categories);
-    } else {
-      const monthValue = value.slice(0, 7);
-      onFilterChange(monthValue, categories);
-    }
+    const monthValue = value.slice(0, 7);
+    setFormattedStartDate(monthValue);
+    onFilterChange(monthValue, categories);
   };
 
   return (
@@ -61,27 +74,15 @@ const Filters: React.FC<FiltersProps> = ({
               <span>Start Date</span>
             </label>
             <div className="relative">
-              {isMonthSupported ? (
-                <input
-                  id="startDate"
-                  type="month"
-                  value={formattedStartDate || ""}
-                  min={minMonth}
-                  max={maxMonth}
-                  onChange={handleDateChange}
-                  className="h-[50px] w-full rounded-lg border border-teal-80 bg-teal-70 p-4 text-sm text-foreground shadow-sm transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-20"
-                />
-              ) : (
-                <input
-                  id="startDate"
-                  type="date"
-                  value={formattedStartDate ? formattedStartDate + "-01" : ""} // Convert YYYY-MM to YYYY-MM-DD for date picker
-                  min={minDate}
-                  max={maxDate}
-                  onChange={handleDateChange}
-                  className="h-[50px] w-full rounded-lg border border-teal-80 bg-teal-70 p-4 text-sm text-foreground shadow-sm transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-20"
-                />
-              )}
+              <input
+                id="startDate"
+                type={inputType}
+                value={formattedStartDate || ""}
+                min={inputType === "month" ? minMonth : minDate}
+                max={inputType === "month" ? maxMonth : maxDate}
+                onChange={handleDateChange}
+                className="h-[50px] w-full rounded-lg border border-teal-80 bg-teal-70 p-4 text-sm text-foreground shadow-sm transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-20"
+              />
             </div>
           </div>
           <div className="flex flex-1 flex-col gap-6">

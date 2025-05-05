@@ -40,15 +40,16 @@ function generateDescription() {
  * Files are named workouts-page-1.json to workouts-page-50.json.
  */
 async function generateWorkouts() {
-  const dataDir = path.join(process.cwd(), 'src', 'data');
-  
+  const dataDir = path.join(process.cwd(), "src", "data");
+
   // Create the data directory if it doesn't exist
   try {
     await fs.mkdir(dataDir, { recursive: true });
     console.log(`Created directory: ${dataDir}`);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    if (error.code !== 'EEXIST') {
-      console.error('Error creating directory:', error);
+    if (error.code !== "EEXIST") {
+      console.error("Error creating directory:", error);
       return;
     }
   }
